@@ -1,11 +1,11 @@
 ---
-name: apply
+name: deploy
 on:
   push:
     branches:
       - main
 jobs:
-  apply:
+  deploy:
     runs-on: ubuntu-latest
     permissions: {}
     env:
