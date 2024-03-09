@@ -1,7 +1,7 @@
 ---
-name: pull_request_target
+name: pull_request
 
-on: pull_request_target
+on: pull_request
 
 jobs:
   test:

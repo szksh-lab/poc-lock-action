@@ -48,7 +48,7 @@ runs:
         fi
 
         github-comment exec \
-          -c "${GITHUB_ACTION_PATH}/github-comment.yaml" \
+          -config "${GITHUB_ACTION_PATH}/github-comment.yaml" \
           -k lock \
           -var "target:$TARGET" -- \
           ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$msg" -b "$LOCK_BRANCH"

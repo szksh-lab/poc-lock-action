@@ -38,3 +38,4 @@ jobs:
           lock_branch: ${{env.LOCK_BRANCH}}
           target: ${{env.TARGET}}
           skip_comment: "true"
+          maintainers: "@suzuki-shunsuke"
