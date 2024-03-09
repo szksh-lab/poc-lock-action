@@ -48,6 +48,7 @@ jobs:
             echo ""
             exit 0
           fi
+          ghcp -v
           if github-comment exec -k lock -- ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$MSG" -b "$LOCK_BRANCH"; then
             echo ""
             echo "::notice::Locked The target"

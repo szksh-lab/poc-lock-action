@@ -47,6 +47,7 @@ jobs:
             exit 0
           fi
           echo "locked=false" >> "$GITHUB_OUTPUT"
+          ghcp -v
           if github-comment exec -k lock -var "target:$TARGET" -- ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$MSG" -b "$LOCK_BRANCH"; then
             echo "got_locked=true" >> "$GITHUB_OUTPUT"
             echo ""
