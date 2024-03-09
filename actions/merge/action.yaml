@@ -1,6 +1,16 @@
 name: Merge
 description: Merge
 inputs:
+  lock_branch:
+    description: |
+      A GitHub branch to lock
+    required: true
+
+  pr_number:
+    description: |
+      Pull Request Number to merge
+    required: true
+
   github_token:
     description: |
       GitHub Access Token
@@ -13,16 +23,6 @@ inputs:
     description: |
       A target to lock
     required: false
-
-  lock_branch:
-    description: |
-      A GitHub branch to lock
-    required: true
-
-  pr_number:
-    description: |
-      Pull Request Number to merge
-    required: true
 runs:
   using: composite
   steps:
