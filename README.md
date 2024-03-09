@@ -9,8 +9,10 @@ This PoC implements the lock mechanism with GitHub branches.
 
 ## Overview
 
-By GitHub branch protection, disable all users to merge pull requests themselves and allow only a GitHub App to merge pull requests.
+This PoC configures a GitHub branch protection so that all users can't merge pull requests themselves and only a GitHub App can merge pull requests.
 To merge pull requests, users have to post a comment `/merge` to pull requests.
+
+![/merge](https://github.com/szksh-lab/poc-lock-action/assets/13323303/99cdf980-69bf-460f-8989-1202c667979d)
 
 When a comment `/merge` is posted, the GitHub Actions Workflow `merge` is run.
 The workflow checks if the deploy is locked.
