@@ -62,6 +62,9 @@ GitHub branches have several advantages.
   - You don't have to prepare services such as AWS DynamoDB or S3
   - You don't have to host anything
 - Free 💰
+- Everyone can check the lock status easily
+  - [branches](https://github.com/szksh-lab/poc-lock-action/branches)
+  - [activity](https://github.com/szksh-lab/poc-lock-action/activity)
 
 ## Alternatives
 
