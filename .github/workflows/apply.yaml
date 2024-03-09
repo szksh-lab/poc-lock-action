@@ -20,7 +20,8 @@ jobs:
           private_key: ${{secrets.APP_PRIVATE_KEY}}
           permissions: >-
             {
-              "contents": "write"
+              "contents": "write",
+              "pull_requests": "write"
             }
           repositories: >-
             [
@@ -66,4 +67,4 @@ jobs:
         run: github-comment exec -k unlock -- gh api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
         if: always()
         env:
-          GH_TOKEN: ${{steps.token.outputs.token}}
+          GITHUB_TOKEN: ${{steps.token.outputs.token}}
