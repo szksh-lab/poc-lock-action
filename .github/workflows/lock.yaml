@@ -1,18 +1,21 @@
 ---
-name: Deploy
+name: Lock
+run-name: Lock ${{inputs.target}}
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'The target to lock'
+        required: true
 jobs:
-  deploy:
+  lock:
     runs-on: ubuntu-latest
     permissions: {}
     env:
-      LOCK_BRANCH: lock/foo
+      TARGET: ${{inputs.target}}
+      LOCK_BRANCH: lock/${{inputs.target}}
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-
       - id: token
         uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
         with:
@@ -20,52 +23,28 @@ jobs:
           private_key: ${{secrets.APP_PRIVATE_KEY}}
           permissions: >-
             {
-              "contents": "write",
-              "pull_requests": "write"
+              "contents": "write"
             }
           repositories: >-
             [
               "${{github.event.repository.name}}"
             ]
-
       - uses: aquaproj/aqua-installer@v2.3.0
         with:
           aqua_version: v2.23.2
         env:
           GITHUB_TOKEN: ${{steps.token.outputs.token}}
-
-      - name: ci-info
-        run: |
-          github-comment exec -- ci-info run | sed "s/^export //" >> "$GITHUB_ENV"
-        env:
-          GITHUB_TOKEN: ${{steps.token.outputs.token}}
-
       - name: Lock
         id: lock
         run: |
           set -euo pipefail
           if gh api "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"; then
             echo ""
+            echo "::notice::The target has already been locked"
             exit 0
           fi
           ghcp -v
-          if github-comment exec -k lock -- ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$MSG" -b "$LOCK_BRANCH"; then
-            echo ""
-            echo "::notice::Locked The target"
-          else
-            echo ""
-            echo "::error::Failed to Lock the target"
-            exit 1
-          fi
+          ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$MSG" -b "$LOCK_BRANCH"
         env:
           MSG: lock
-          GITHUB_TOKEN: ${{steps.token.outputs.token}}
-
-      - name: Deploy
-        run: sleep 30
-
-      - name: Unlock
-        run: github-comment exec -k unlock -- gh api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
-        if: always()
-        env:
           GITHUB_TOKEN: ${{steps.token.outputs.token}}

@@ -17,6 +17,9 @@ The workflow checks if the deploy is locked.
 If the deploy is locked, the pull request isn't merged.
 Users have to wait until the lock is released.
 If the deploy isn't locked, the workflow gets a lock and merge the pull request.
+
+![merge](https://github.com/szksh-lab/poc-lock-action/assets/13323303/202d5adf-e661-4f71-ba07-c1c6fbaac67c)
+
 If it fails to get a lock, the pull request isn't merged.
 If the workflow can get a lock but can't merge the pull request, the lock is released.
 
@@ -47,9 +50,6 @@ Please see [terraform](terraform) too.
   - [deploy](.github/workflows/deploy.yaml)
     - This workflow is triggered when a pull request is merged to the default branch
     - Ensure a lock, deploy, and release the lock
-
-## GitHub Actions Workflows
-
 
 ## LICENSE
 
