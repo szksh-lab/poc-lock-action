@@ -61,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{steps.token.outputs.token}}
 
       - name: Apply
-        run: sleep 60
+        run: sleep 30
 
       - name: Unlock
         run: github-comment exec -k unlock -- gh api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
