@@ -13,6 +13,7 @@ jobs:
     env:
       TARGET: foo
       LOCK_BRANCH: lock/foo
+      GH_COMMENT_PR_NUMBER: ${{github.event.issue.number}}
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - id: token
