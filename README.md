@@ -14,7 +14,7 @@ To merge pull requests, users have to post a comment `/merge` to pull requests.
 
 ![/merge](https://github.com/szksh-lab/poc-lock-action/assets/13323303/99cdf980-69bf-460f-8989-1202c667979d)
 
-When a comment `/merge` is posted, the GitHub Actions Workflow `merge` is run.
+When a comment `/merge` is posted, the GitHub Actions Workflow [merge](.github/workflows/merge.yaml) is run.
 The workflow checks if the deploy is locked.
 If the deploy is locked, the pull request isn't merged.
 Users have to wait until the lock is released.
@@ -26,9 +26,9 @@ If the deploy isn't locked, the workflow gets a lock and merge the pull request.
 ![merge](https://github.com/szksh-lab/poc-lock-action/assets/13323303/202d5adf-e661-4f71-ba07-c1c6fbaac67c)
 
 If it fails to get a lock, the pull request isn't merged.
-If the workflow can get a lock but can't merge the pull request, the lock is released.
+If the workflow gets a lock but can't merge the pull request, the lock is released.
 
-When a pull request is merged, the GitHub Actions Workflow `deploy` is run.
+When a pull request is merged, the GitHub Actions Workflow [deploy](.github/workflows/deploy.yaml) is run.
 The workflow checks if the deploy is locked.
 If the deploy isn't locked, the workflow gets a lock.
 The workflow runs a deploy.
@@ -68,7 +68,7 @@ GitHub branches have several advantages.
   - You don't have to host anything
 - Free 💰
 - Everyone can check the lock status easily
-  - [branches](https://github.com/szksh-lab/poc-lock-action/branches)
+  - [branches](https://github.com/szksh-lab/poc-lock-action/branches/all?query=lock%2F)
   - [activity](https://github.com/szksh-lab/poc-lock-action/activity)
 
 ## Alternatives
