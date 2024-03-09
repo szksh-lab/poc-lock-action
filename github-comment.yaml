@@ -10,7 +10,7 @@ post:
       This means a deploy is being run on the default branch.
       Please wait until the deploy is finished and try to merge again.
 
-      If no deploy is run but the deploy is locked, this means the lock wasn't released properly.
+      If no deploy is run but the deploy is locked, this means the lock wasn't unlocked properly.
       In this case, please contact maintainers.
 
 exec:
@@ -28,12 +28,12 @@ exec:
   unlock:
     - when: ExitCode != 0
       template: |
-        # :x: Failed to release the lock {{.Vars.target}}
+        # :x: Failed to unlock the lock {{.Vars.target}}
 
         @suzuki-shunsuke
 
-        It failed to release the lock of the target `{{.Vars.target}}`.
-        Unless the lock is released, you can't deploy anything to the target.
+        It failed to unlock the lock of the target `{{.Vars.target}}`.
+        Unless the lock is unlocked, you can't deploy anything to the target.
         Please contact maintainers.
 
         {{template "link" .}}

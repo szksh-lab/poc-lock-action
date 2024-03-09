@@ -1,0 +1,59 @@
+name: Lock
+description: Lock
+inputs:
+  github_token:
+    description: |
+      GitHub Access Token
+      contents:write - Push commits
+      pull-requests:write - Create pull request comments and labels
+    required: false
+    default: ${{ github.token }}
+  
+  skip_comment:
+    description: |
+      Whether to post a comment
+    required: false
+    default: "false"
+
+  target:
+    description: |
+      A target to lock
+    required: false
+
+  lock_branch:
+    description: |
+      A GitHub branch to lock
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Lock
+      id: lock
+      shell: bash
+      run: |
+        set -euo pipefail
+        ghcp -v
+
+        if [ "$SKIP_COMMENT" = "true" ]; then
+          ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$msg" -b "$LOCK_BRANCH"
+          exit 0
+        fi
+
+        msg="$GITHUB_TRIGGERING_ACTOR created the lock.
+        [Workflow Run]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)"
+
+        if [ "$GITHUB_EVENT_NAME" = "issue_comment" ]; then
+          msg="$msg
+          [Comment](${{github.event.comment.html_url}})"
+        fi
+
+        github-comment exec \
+          -c "${GITHUB_ACTION_PATH}/github-comment.yaml" \
+          -k lock \
+          -var "target:$TARGET" -- \
+          ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$msg" -b "$LOCK_BRANCH"
+      env:
+        GITHUB_TOKEN: ${{inputs.github_token}}
+        LOCK_BRANCH: ${{inputs.lock_branch}}
+        SKIP_COMMENT: ${{inputs.skip_comment}}
+        TARGET: ${{inputs.target}}

@@ -1,0 +1,38 @@
+name: Check lock
+description: Check lock
+inputs:
+  github_token:
+    description: |
+      GitHub Access Token
+      contents:read - Get a branch
+    required: false
+    default: ${{ github.token }}
+  lock_branch:
+    description: |
+      A GitHub branch to lock
+    required: true
+outputs:
+  is_locked:
+    description: Whether the target is locked
+    value: ${{steps.check-lock.outputs.is_locked}}
+  commit_sha:
+    description: Commit SHA of the lock
+    value: ${{steps.check-lock.outputs.commit_sha}}
+runs:
+  using: composite
+  steps:
+    - name: Check lock
+      id: check-lock
+      shell: bash
+      run: |
+        set -eu
+        is_locked=false
+        if commit_sha=$(gh api "repos/${GITHUB_REPOSITORY}/git/refs/heads/$LOCK_BRANCH" -q '.object.sha'); then
+          is_locked=true
+          echo "commit_sha"=$commit_sha" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        echo "is_locked=$is_locked" >> "$GITHUB_OUTPUT"
+      env:
+        GITHUB_TOKEN: ${{inputs.github_token}}
+        LOCK_BRANCH: ${{inputs.lock_branch}}
