@@ -46,7 +46,7 @@ runs:
           gh api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
       shell: bash
       env:
-        GITHUB_TOKEN: ${{steps.token.outputs.token}}
+        GITHUB_TOKEN: ${{inputs.token}}
         LOCK_BRANCH: ${{inputs.lock_branch}}
         SKIP_COMMENT: ${{inputs.skip_comment}}
         TARGET: ${{inputs.target}}
