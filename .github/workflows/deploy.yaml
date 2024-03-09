@@ -1,11 +1,11 @@
 ---
-name: apply
+name: Deploy
 on:
   push:
     branches:
       - main
 jobs:
-  apply:
+  deploy:
     runs-on: ubuntu-latest
     permissions: {}
     env:
@@ -61,7 +61,7 @@ jobs:
           MSG: lock
           GITHUB_TOKEN: ${{steps.token.outputs.token}}
 
-      - name: Apply
+      - name: Deploy
         run: sleep 30
 
       - name: Unlock

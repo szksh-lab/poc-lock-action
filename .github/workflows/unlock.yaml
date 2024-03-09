@@ -1,0 +1,37 @@
+---
+name: Unlock 
+run-name: Unlock ${{inputs.target}}
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'The target to lock'
+        required: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions: {}
+    env:
+      TARGET: ${{inputs.target}}
+      LOCK_BRANCH: lock/${{inputs.target}}
+    steps:
+      - id: token
+        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        with:
+          app_id: ${{secrets.APP_ID}}
+          private_key: ${{secrets.APP_PRIVATE_KEY}}
+          permissions: >-
+            {
+              "contents": "write",
+              "pull_requests": "write"
+            }
+          repositories: >-
+            [
+              "${{github.event.repository.name}}"
+            ]
+
+      - name: Unlock
+        run: gh -R "$GITHUB_REPOSITORY" api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{steps.token.outputs.token}}

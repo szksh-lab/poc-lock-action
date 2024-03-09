@@ -1,5 +1,5 @@
 ---
-name: merge
+name: Merge
 on:
   issue_comment:
     types:
