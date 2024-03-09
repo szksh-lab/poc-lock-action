@@ -57,7 +57,7 @@ runs:
         github-comment exec -- gh pr merge "$PR_NUMBER" -s
       env:
         PR_NUMBER: ${{inputs.pr_number}}
-        github_token: ${{inputs.github_token}}
+        GITHUB_TOKEN: ${{inputs.github_token}}
 
     - name: Unlock if it failed to merge
       if: steps.merge.outcome != 'success'
