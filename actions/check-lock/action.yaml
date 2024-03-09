@@ -6,7 +6,7 @@ inputs:
       GitHub Access Token
       contents:read - Get a branch
     required: false
-    default: ${{ github.token }}
+    default: ${{github.token}}
   lock_branch:
     description: |
       A GitHub branch to lock
