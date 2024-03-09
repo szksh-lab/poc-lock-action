@@ -16,6 +16,9 @@ When a comment `/merge` is posted, the GitHub Actions Workflow `merge` is run.
 The workflow checks if the deploy is locked.
 If the deploy is locked, the pull request isn't merged.
 Users have to wait until the lock is released.
+
+![locked](https://github.com/szksh-lab/poc-lock-action/assets/13323303/54dc50f7-5757-4c2a-8d89-0905d4aee3c6)
+
 If the deploy isn't locked, the workflow gets a lock and merge the pull request.
 
 ![merge](https://github.com/szksh-lab/poc-lock-action/assets/13323303/202d5adf-e661-4f71-ba07-c1c6fbaac67c)
