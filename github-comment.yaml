@@ -15,7 +15,7 @@ post:
 
 exec:
   lock:
-    - when: true
+    - when: ExitCode != 0
       template: |
         # :x: Failed to merge the pull request
 
@@ -26,7 +26,7 @@ exec:
         {{template "hidden_combined_output" .}}
 
   unlock:
-    - when: true
+    - when: ExitCode != 0
       template: |
         # :x: Failed to release the lock {{.Vars.target}}
 
