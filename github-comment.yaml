@@ -1,0 +1,43 @@
+---
+post:
+  already-locked:
+    template: |
+      # :x: Failed to merge the pull request as the deploy to {{.Vars.target}} is locked
+
+      {{template "header" .}}
+
+      The deploy has already been locked.
+      This means a deploy is being run on the default branch.
+      Please wait until the deploy is finished and try to merge again.
+
+      If no deploy is run but the target is locked, this means the lock wasn't released properly.
+      In this case, please contact maintainers.
+
+exec:
+  lock:
+    - when: true
+      template: |
+        # :x: Failed to merge the pull request
+
+        {{template "link" .}}
+ 
+        {{template "join_command" .}}
+
+        {{template "hidden_combined_output" .}}
+
+  unlock:
+    - when: true
+      template: |
+        # :x: Failed to release the lock {{.Vars.target}}
+
+        @suzuki-shunsuke
+
+        It failed to release the lock of the target `{{.Vars.target}}`.
+        Unless the lock is released, you can't deploy anything to the target.
+        Please contact maintainers.
+
+        {{template "link" .}}
+ 
+        {{template "join_command" .}}
+
+        {{template "hidden_combined_output" .}}

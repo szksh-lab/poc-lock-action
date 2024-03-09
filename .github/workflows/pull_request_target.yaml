@@ -1,0 +1,11 @@
+---
+name: pull_request_target
+
+on: pull_request_target
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - run: sleep 3
