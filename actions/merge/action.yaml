@@ -38,7 +38,11 @@ runs:
       if: steps.check-lock.outputs.is_locked == 'true'
       run: |
         echo "::error::The target has already been locked"
-        github-comment post -k already-locked -var "target:$TARGET" -var "commit_sha:${COMMIT_SHA}"
+        github-comment post \
+          -config "${GITHUB_ACTION_PATH}/github-comment.yaml" \
+          -k already-locked \
+          -var "target:$TARGET" \
+          -var "commit_sha:${COMMIT_SHA}"
         exit 1
       env:
         GITHUB_TOKEN: ${{inputs.github_token}}
