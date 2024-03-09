@@ -29,7 +29,7 @@ runs:
         is_locked=false
         if commit_sha=$(gh api "repos/${GITHUB_REPOSITORY}/git/refs/heads/$LOCK_BRANCH" -q '.object.sha'); then
           is_locked=true
-          echo "commit_sha"=$commit_sha" >> "$GITHUB_OUTPUT"
+          echo "commit_sha=$commit_sha" >> "$GITHUB_OUTPUT"
           exit 0
         fi
         echo "is_locked=$is_locked" >> "$GITHUB_OUTPUT"
