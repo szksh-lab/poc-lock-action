@@ -1,0 +1,14 @@
+---
+post:
+  already-locked:
+    template: |
+      # :x: Failed to merge the pull request as the deploy to {{.Vars.target}} is locked
+
+      {{template "link" .}}
+
+      The deploy is being locked now.
+      This means a deploy is being run on the default branch.
+      Please wait until the deploy is finished and try to merge again.
+
+      If no deploy is run but the deploy is locked, this means the lock wasn't unlocked properly.
+      In this case, please contact maintainers.

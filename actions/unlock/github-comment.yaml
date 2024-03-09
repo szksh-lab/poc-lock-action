@@ -1,0 +1,18 @@
+---
+exec:
+  unlock:
+    - when: ExitCode != 0
+      template: |
+        # :x: Failed to unlock the lock {{.Vars.target}}
+
+        {{if .Vars.maintainers}}{{.Vars.maintainers}}{{end}}
+
+        It failed to unlock the lock of the target `{{.Vars.target}}`.
+        Unless the lock is unlocked, you can't deploy anything to the target.
+        Please contact maintainers.
+
+        {{template "link" .}}
+ 
+        {{template "join_command" .}}
+
+        {{template "hidden_combined_output" .}}

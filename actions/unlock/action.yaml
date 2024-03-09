@@ -20,6 +20,11 @@ inputs:
       A target to lock
     required: false
 
+  maintainers:
+    description: |
+      Mentions of maintainers
+    required: false
+
   lock_branch:
     description: |
       A GitHub branch to lock
@@ -34,9 +39,10 @@ runs:
         fi
 
         github-comment exec \
-          -c "${GITHUB_ACTION_PATH}/github-comment.yaml" \
+          -config "${GITHUB_ACTION_PATH}/github-comment.yaml" \
           -k unlock \
           -var "target:$TARGET" -- \
+          -var "maintainers:$MAINTAINERS" -- \
           gh api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
       shell: bash
       env:
@@ -44,3 +50,4 @@ runs:
         LOCK_BRANCH: ${{inputs.lock_branch}}
         SKIP_COMMENT: ${{inputs.skip_comment}}
         TARGET: ${{inputs.target}}
+        MAINTAINERS: ${{inputs.maintainers}}
