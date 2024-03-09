@@ -1,6 +1,11 @@
 name: Unlock
 description: Unlock
 inputs:
+  lock_branch:
+    description: |
+      A GitHub branch to lock
+    required: true
+
   github_token:
     description: |
       GitHub Access Token
@@ -24,11 +29,6 @@ inputs:
     description: |
       Mentions of maintainers
     required: false
-
-  lock_branch:
-    description: |
-      A GitHub branch to lock
-    required: true
 runs:
   using: composite
   steps:
