@@ -4,7 +4,7 @@ post:
     template: |
       # :x: Failed to merge the pull request as the deploy to {{.Vars.target}} is locked
 
-      {{template "header" .}}
+      {{template "link" .}}
 
       The deploy has already been locked.
       This means a deploy is being run on the default branch.

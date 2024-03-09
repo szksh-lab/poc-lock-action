@@ -28,6 +28,9 @@ The workflow checks if the deploy is locked.
 If the deploy isn't locked, the workflow gets a lock.
 The workflow runs a deploy.
 After the deploy, the workflow releases the lock.
+If it fails to release the lock, the failure is notified to the pull request.
+
+![release error](https://github.com/szksh-lab/poc-lock-action/assets/13323303/164276b7-a037-406c-b36d-e2d8e2d710ba)
 
 ## How to set up
 
@@ -50,6 +53,27 @@ Please see [terraform](terraform) too.
   - [deploy](.github/workflows/deploy.yaml)
     - This workflow is triggered when a pull request is merged to the default branch
     - Ensure a lock, deploy, and release the lock
+
+## Why do we use GitHub branches for lock mechanism?
+
+GitHub branches have several advantages.
+
+- The mechanism doesn't depend on any SaaS such as AWS and GCP
+  - You don't have to prepare services such as AWS DynamoDB or S3
+  - You don't have to host anything
+- Free 💰
+
+## Alternatives
+
+- [Merge Queue](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue)
+
+## Q&A
+
+### Why do we create an empty commit to create a lock branch
+
+An empty commit isn't mandatory.
+But if the same commit associates with multiple branches, sometimes unexpected issues occur.
+So it is safer to create an empty commit.
 
 ## LICENSE
 

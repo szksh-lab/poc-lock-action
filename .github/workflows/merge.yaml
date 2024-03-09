@@ -44,7 +44,7 @@ jobs:
             echo "::error::The target has already been locked"
             github-comment post -k already-locked -var "target:$TARGET"
             echo "locked=true" >> "$GITHUB_OUTPUT"
-            exit 0
+            exit 1
           fi
           echo "locked=false" >> "$GITHUB_OUTPUT"
           ghcp -v
