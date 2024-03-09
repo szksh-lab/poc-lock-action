@@ -41,7 +41,7 @@ runs:
         github-comment exec \
           -config "${GITHUB_ACTION_PATH}/github-comment.yaml" \
           -k unlock \
-          -var "target:$TARGET" -- \
+          -var "target:$TARGET" \
           -var "maintainers:$MAINTAINERS" -- \
           gh api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
       shell: bash

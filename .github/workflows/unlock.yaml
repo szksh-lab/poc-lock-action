@@ -30,8 +30,17 @@ jobs:
               "${{github.event.repository.name}}"
             ]
 
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Check lock
+        id: check-lock
+        uses: ./actions/check-lock
+        with:
+          github_token: ${{steps.token.outputs.token}}
+          lock_branch: ${{env.LOCK_BRANCH}}
+
       - name: Unlock
-        if: always()
+        if: steps.check-lock.outputs.is_locked == 'true'
         uses: ./actions/unlock
         with:
           github_token: ${{steps.token.outputs.token}}

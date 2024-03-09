@@ -37,8 +37,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{steps.token.outputs.token}}
 
+      - name: Check lock
+        id: check-lock
+        uses: ./actions/check-lock
+        with:
+          github_token: ${{steps.token.outputs.token}}
+          lock_branch: ${{env.LOCK_BRANCH}}
+
       - name: Lock
         uses: ./actions/lock
+        if: steps.check-lock.outputs.is_locked == 'false'
         with:
           github_token: ${{steps.token.outputs.token}}
           lock_branch: ${{env.LOCK_BRANCH}}
