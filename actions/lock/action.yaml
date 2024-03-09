@@ -1,13 +1,18 @@
 name: Lock
 description: Lock
 inputs:
+  lock_branch:
+    description: |
+      A GitHub branch to lock
+    required: true
+
   github_token:
     description: |
       GitHub Access Token
       contents:write - Push commits
       pull-requests:write - Create pull request comments and labels
     required: false
-    default: ${{ github.token }}
+    default: ${{github.token}}
   
   skip_comment:
     description: |
@@ -19,11 +24,6 @@ inputs:
     description: |
       A target to lock
     required: false
-
-  lock_branch:
-    description: |
-      A GitHub branch to lock
-    required: true
 runs:
   using: composite
   steps:
