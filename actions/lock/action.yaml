@@ -34,17 +34,17 @@ runs:
         set -euo pipefail
         ghcp -v
 
-        if [ "$SKIP_COMMENT" = "true" ]; then
-          ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$msg" -b "$LOCK_BRANCH"
-          exit 0
-        fi
-
         msg="$GITHUB_TRIGGERING_ACTOR created the lock.
         [Workflow Run]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)"
 
         if [ "$GITHUB_EVENT_NAME" = "issue_comment" ]; then
           msg="$msg
           [Comment](${{github.event.comment.html_url}})"
+        fi
+
+        if [ "$SKIP_COMMENT" = "true" ]; then
+          ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$msg" -b "$LOCK_BRANCH"
+          exit 0
         fi
 
         github-comment exec \
