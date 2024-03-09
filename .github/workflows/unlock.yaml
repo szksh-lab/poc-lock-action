@@ -31,7 +31,10 @@ jobs:
             ]
 
       - name: Unlock
-        run: gh -R "$GITHUB_REPOSITORY" api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
         if: always()
-        env:
-          GITHUB_TOKEN: ${{steps.token.outputs.token}}
+        uses: ./actions/unlock
+        with:
+          github_token: ${{steps.token.outputs.token}}
+          lock_branch: ${{env.LOCK_BRANCH}}
+          target: ${{env.TARGET}}
+          skip_comment: "true"

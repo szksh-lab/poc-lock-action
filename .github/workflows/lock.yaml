@@ -16,6 +16,7 @@ jobs:
       LOCK_BRANCH: lock/${{inputs.target}}
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
       - id: token
         uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
         with:
@@ -29,22 +30,17 @@ jobs:
             [
               "${{github.event.repository.name}}"
             ]
+
       - uses: aquaproj/aqua-installer@v2.3.0
         with:
           aqua_version: v2.23.2
         env:
           GITHUB_TOKEN: ${{steps.token.outputs.token}}
+
       - name: Lock
-        id: lock
-        run: |
-          set -euo pipefail
-          if gh api "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"; then
-            echo ""
-            echo "::notice::The target has already been locked"
-            exit 0
-          fi
-          ghcp -v
-          ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$MSG" -b "$LOCK_BRANCH"
-        env:
-          MSG: lock
-          GITHUB_TOKEN: ${{steps.token.outputs.token}}
+        uses: ./actions/lock
+        with:
+          github_token: ${{steps.token.outputs.token}}
+          lock_branch: ${{env.LOCK_BRANCH}}
+          target: ${{inputs.target}}
+          skip_comment: "true"

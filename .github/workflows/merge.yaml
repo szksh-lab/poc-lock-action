@@ -16,6 +16,7 @@ jobs:
       GH_COMMENT_PR_NUMBER: ${{github.event.issue.number}}
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
       - id: token
         uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
         with:
@@ -30,48 +31,17 @@ jobs:
             [
               "${{github.event.repository.name}}"
             ]
+
       - uses: aquaproj/aqua-installer@v2.3.0
         with:
           aqua_version: v2.23.2
         env:
           GITHUB_TOKEN: ${{steps.token.outputs.token}}
-      - name: Lock
-        id: lock
-        run: |
-          set -euo pipefail
-          if gh api "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"; then
-            echo ""
-            echo "::error::The target has already been locked"
-            github-comment post -k already-locked -var "target:$TARGET"
-            echo "locked=true" >> "$GITHUB_OUTPUT"
-            exit 1
-          fi
-          echo "locked=false" >> "$GITHUB_OUTPUT"
-          ghcp -v
-          if github-comment exec -k lock -var "target:$TARGET" -- ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$MSG" -b "$LOCK_BRANCH"; then
-            echo "got_locked=true" >> "$GITHUB_OUTPUT"
-            echo ""
-            echo "::notice::Locked The target"
-          else
-            echo "got_locked=false" >> "$GITHUB_OUTPUT"
-            echo ""
-            echo "::error::Failed to Lock the target"
-            exit 1
-          fi
-        env:
-          MSG: lock
-          GITHUB_TOKEN: ${{steps.token.outputs.token}}
 
       - name: Merge
-        if: steps.lock.outputs.locked == 'false'
-        run: |
-          github-comment exec -- gh pr merge "$PR_NUMBER" -s
-        env:
-          PR_NUMBER: ${{github.event.issue.number}}
-          GITHUB_TOKEN: ${{steps.token.outputs.token}}
-
-      - name: Unlock if it failed to merge
-        if: steps.lock.outputs.locked == 'false' && failure() && steps.lock.outputs.got_locked == 'true'
-        run: github-comment exec -k unlock -var "target:$TARGET" -- gh api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
-        env:
-          GITHUB_TOKEN: ${{steps.token.outputs.token}}
+        uses: ./actions/merge
+        with:
+          github_token: ${{steps.token.outputs.token}}
+          target: ${{env.TARGET}}
+          lock_branch: ${{env.LOCK_BRANCH}}
+          pr_number: ${{github.event.issue.number}}

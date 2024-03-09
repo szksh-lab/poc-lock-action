@@ -41,31 +41,19 @@ jobs:
           GITHUB_TOKEN: ${{steps.token.outputs.token}}
 
       - name: Lock
-        id: lock
-        run: |
-          set -euo pipefail
-          if gh api "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"; then
-            echo ""
-            exit 0
-          fi
-          ghcp -v
-          if github-comment exec -k lock -- ghcp empty-commit -r "$GITHUB_REPOSITORY" -m "$MSG" -b "$LOCK_BRANCH"; then
-            echo ""
-            echo "::notice::Locked The target"
-          else
-            echo ""
-            echo "::error::Failed to Lock the target"
-            exit 1
-          fi
-        env:
-          MSG: lock
-          GITHUB_TOKEN: ${{steps.token.outputs.token}}
+        uses: ./actions/lock
+        with:
+          github_token: ${{steps.token.outputs.token}}
+          lock_branch: ${{env.LOCK_BRANCH}}
+          target: ${{env.TARGET}}
 
       - name: Deploy
         run: sleep 30
 
       - name: Unlock
-        run: github-comment exec -k unlock -- gh api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
         if: always()
-        env:
-          GITHUB_TOKEN: ${{steps.token.outputs.token}}
+        uses: ./actions/unlock
+        with:
+          github_token: ${{steps.token.outputs.token}}
+          lock_branch: ${{env.LOCK_BRANCH}}
+          target: ${{env.TARGET}}

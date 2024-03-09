@@ -1,0 +1,46 @@
+name: Unlock
+description: Unlock
+inputs:
+  github_token:
+    description: |
+      GitHub Access Token
+      contents:write - Push commits
+      pull-requests:write - Create pull request comments and labels
+    required: false
+    default: ${{ github.token }}
+  
+  skip_comment:
+    description: |
+      Whether to post a comment
+    required: false
+    default: "false"
+
+  target:
+    description: |
+      A target to lock
+    required: false
+
+  lock_branch:
+    description: |
+      A GitHub branch to lock
+    required: true
+runs:
+  using: composite
+  steps:
+    - run: |
+        if [ "$SKIP_COMMENT" = "true" ]; then
+          gh api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
+          exit 0
+        fi
+
+        github-comment exec \
+          -c "${GITHUB_ACTION_PATH}/github-comment.yaml" \
+          -k unlock \
+          -var "target:$TARGET" -- \
+          gh api -X DELETE "repos/{owner}/{repo}/git/refs/heads/$LOCK_BRANCH"
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{steps.token.outputs.token}}
+        LOCK_BRANCH: ${{inputs.lock_branch}}
+        SKIP_COMMENT: ${{inputs.skip_comment}}
+        TARGET: ${{inputs.target}}
