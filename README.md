@@ -37,37 +37,6 @@ If it fails to unlock the lock, the failure is notified to the pull request.
 
 ![unlock error](https://github.com/szksh-lab/poc-lock-action/assets/13323303/164276b7-a037-406c-b36d-e2d8e2d710ba)
 
-## Pseudo code
-
-merge
-
-```
-if Get lock:
-  Notify error "Deploy is locked"
-  exit 1
-if ! Lock:
-  Notify error "Failed to lock"
-  exit 1
-if ! Merge pull request:
-  Notify error "Failed to merge pull request"
-  if ! Unlock:
-    Notify error "Failed to unlock"
-  exit 1
-```
-
-deploy
-
-```
-if ! Get lock:
-  if ! Lock:
-    Notify error "Failed to lock"
-    exit 1
-Deploy
-if ! Unlock:
-  Notify error "Failed to unlock"
-  exit 1
-```
-
 ## How to set up
 
 - Create a GitHub App
