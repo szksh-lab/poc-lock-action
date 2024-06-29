@@ -9,6 +9,7 @@ on:
         required: true
 jobs:
   deploy:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     permissions: {}
     env:
